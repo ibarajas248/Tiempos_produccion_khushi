@@ -47,7 +47,7 @@ df = load_data()
 df_totales =pd.read_excel("datos_empleados_todas.xlsx")
 
 
-st.write("Ultima actualización: 8/12/2024")
+st.write("Ultima actualización: 14/12/2024")
 # Título de la aplicación
 st.title("Visualización de Tiempo Promedio y Desviación")
 
@@ -470,85 +470,138 @@ else:
 
         st.write("Gráficos de datos filtrados:")
 
-        if "promedio_500unds_en_horas" in filtered_data.columns and "desviacion_estandar_en_horas" in filtered_data.columns:
-            # Agrupar los datos por producto y operación
-            grouped_data = filtered_data.groupby(["producto", "operaciones"])[
-                ["promedio_500unds_en_horas", "desviacion_estandar_en_horas"]
-            ].mean().reset_index()
+        # Input para la cantidad de unidades
+        cantidad_unidades = st.number_input("Ingresa la cantidad de unidades:", min_value=1, value=500, step=1)
 
-            # Crear un gráfico de barras para mostrar operaciones separadas por productos
-            fig, ax = plt.subplots(figsize=(12, 6))
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(
+            ["Operaciones por Producto", "promedio por producto","Sección", "Máquinas", "Predicción de tiempos"])
 
-            # Obtener lista de operaciones únicas y productos únicos
-            unique_operations = grouped_data["operaciones"].unique()
-            unique_products = grouped_data["producto"].unique()
+        with tab1:
 
-            # Definir colores para los productos
-            colors = plt.cm.tab10(range(len(unique_products)))
 
-            # Ancho de cada barra
-            bar_width = 0.8 / len(unique_products)  # Distribuir barras en un rango fijo
+            if "promedio_500unds_en_horas" in filtered_data.columns and "desviacion_estandar_en_horas" in filtered_data.columns:
+                # Ajustar las columnas de datos al valor dinámico ingresado
+                filtered_data["promedio_por_unds_en_horas"] = filtered_data["promedio_500unds_en_horas"] * (
+                            cantidad_unidades / 500)
+                filtered_data["desviacion_por_unds_en_horas"] = filtered_data["desviacion_estandar_en_horas"] * (
+                            cantidad_unidades / 500)
 
-            # Coordenadas x para las operaciones
-            x_positions = range(len(unique_operations))
+                # Agrupar los datos por producto y operación
+                grouped_data = filtered_data.groupby(["producto", "operaciones"])[
+                    ["promedio_por_unds_en_horas", "desviacion_por_unds_en_horas"]
+                ].mean().reset_index()
 
-            # Dibujar barras para cada producto
-            for i, product in enumerate(unique_products):
-                product_data = grouped_data[grouped_data["producto"] == product]
+                # Crear un gráfico de barras para mostrar operaciones separadas por productos
+                fig, ax = plt.subplots(figsize=(12, 6))
 
-                # Alinear datos con las operaciones únicas para evitar problemas de shape
-                aligned_data = pd.DataFrame({"operaciones": unique_operations}).merge(
-                    product_data,
-                    on="operaciones",
-                    how="left"
-                ).fillna(0)  # Llenar con 0 para operaciones no presentes en el producto
+                # Obtener lista de operaciones únicas y productos únicos
+                unique_operations = grouped_data["operaciones"].unique()
+                unique_products = grouped_data["producto"].unique()
 
-                # Ajustar las posiciones en x para este producto
-                product_x_positions = [x + (i * bar_width) for x in x_positions]
+                # Definir colores para los productos
+                colors = plt.cm.tab10(range(len(unique_products)))
 
-                ax.bar(
-                    product_x_positions,
-                    aligned_data["promedio_500unds_en_horas"],
-                    yerr=aligned_data["desviacion_estandar_en_horas"],
-                    width=bar_width,
-                    label=product,
-                    capsize=5,
-                    alpha=0.75,
-                    color=colors[i],
-                    edgecolor='black'
+                # Ancho de cada barra
+                bar_width = 0.8 / len(unique_products)  # Distribuir barras en un rango fijo
+
+                # Coordenadas x para las operaciones
+                x_positions = range(len(unique_operations))
+
+                # Dibujar barras para cada producto
+                for i, product in enumerate(unique_products):
+                    product_data = grouped_data[grouped_data["producto"] == product]
+
+                    # Alinear datos con las operaciones únicas para evitar problemas de shape
+                    aligned_data = pd.DataFrame({"operaciones": unique_operations}).merge(
+                        product_data,
+                        on="operaciones",
+                        how="left"
+                    ).fillna(0)  # Llenar con 0 para operaciones no presentes en el producto
+
+                    # Ajustar las posiciones en x para este producto
+                    product_x_positions = [x + (i * bar_width) for x in x_positions]
+
+                    ax.bar(
+                        product_x_positions,
+                        aligned_data["promedio_por_unds_en_horas"],
+                        yerr=aligned_data["desviacion_por_unds_en_horas"],
+                        width=bar_width,
+                        label=product,
+                        capsize=5,
+                        alpha=0.75,
+                        color=colors[i],
+                        edgecolor='black'
+                    )
+
+                # Etiquetas y configuraciones del gráfico
+                ax.set_xlabel("Operaciones")
+                ax.set_ylabel(f"Promedio (horas) para {cantidad_unidades} unidades")
+                ax.set_title("Promedio por Operaciones Separadas por Producto")
+                ax.set_xticks([x + (bar_width * (len(unique_products) / 2 - 0.5)) for x in x_positions])
+                ax.set_xticklabels(unique_operations, rotation=45, ha='right', fontsize=9)
+                ax.legend(title="Productos")
+
+                # Mostrar el gráfico
+                st.pyplot(fig)
+            else:
+                st.warning(
+                    "No se encontraron las columnas necesarias para el gráfico ('promedio_500unds_en_horas', 'desviacion_estandar_en_horas')."
                 )
 
-            # Etiquetas y configuraciones del gráfico
-            ax.set_xlabel("Operaciones")
-            ax.set_ylabel("Promedio (horas)")
-            ax.set_title("Promedio por Operaciones Separadas por Producto")
-            ax.set_xticks([x + (bar_width * (len(unique_products) / 2 - 0.5)) for x in x_positions])
-            ax.set_xticklabels(unique_operations, rotation=45, ha='right', fontsize=9)
-            ax.legend(title="Productos")
+        with tab2:
 
-            # Mostrar el gráfico
-            st.pyplot(fig)
-        else:
-            st.warning(
-                "No se encontraron las columnas necesarias para el gráfico ('promedio_500unds_en_horas', 'desviacion_estandar_en_horas')."
-            )
 
-        # Gráfico de barras: Suma de tiempos por Subparte
-        # Gráfico de barras: Suma de tiempos por Subparte
-        if "promedio_500unds_en_horas" in filtered_data.columns:
-            suma_por_producto = filtered_data.groupby("producto")["promedio_500unds_en_horas"].sum()
-            suma_por_producto_mediana =median_by_group.groupby("producto")["tiempo_para_500_en_horas"].sum()
 
-            st.write("Suma de tiempos por producto:")
-            st.bar_chart(suma_por_producto)
 
-        #if "promedio_500unds_en_horas" in filtered_data.columns:
-            suma_por_subparte = filtered_data.groupby("subparte")["promedio_500unds_en_horas"].sum()
-            st.write("Suma de tiempos por subparte:")
-            st.bar_chart(suma_por_subparte)
 
-            # Gráfico de torta para tiempos por subparte
-            st.write("Distribución porcentual de tiempos por subparte:")
+            if "promedio_500unds_en_horas" in filtered_data.columns:
+                # Ajustar los datos al valor dinámico ingresado
+                filtered_data["promedio_por_unds_en_horas"] = filtered_data["promedio_500unds_en_horas"] * (
+                        cantidad_unidades / 500)
+
+                # Sumar tiempos ajustados por producto
+                suma_por_producto = filtered_data.groupby("producto")["promedio_por_unds_en_horas"].sum()
+
+            # Ajustar los datos para la mediana si existe 'tiempo_para_500_en_horas'
+            if "tiempo_para_500_en_horas" in median_by_group.columns:
+                median_by_group["tiempo_por_unds_en_horas"] = median_by_group["tiempo_para_500_en_horas"] * (
+                        cantidad_unidades / 500)
+                suma_por_producto_mediana = median_by_group.groupby("producto")["tiempo_por_unds_en_horas"].sum()
+            else:
+                suma_por_producto_mediana = None
+
+                # Mostrar las sumas ajustadas
+                st.write(f"Suma de tiempos ajustados por producto (promedio) para {cantidad_unidades} unidades:")
+                st.bar_chart(suma_por_producto)
+
+            if suma_por_producto_mediana is not None:
+                st.write(f"Suma de tiempos ajustados por producto (mediana) para {cantidad_unidades} unidades:")
+                st.bar_chart(suma_por_producto_mediana)
+
+            if suma_por_producto_mediana is not None:
+                st.write("Suma de tiempos ajustados por producto (mediana):")
+                st.bar_chart(suma_por_producto_mediana)
+
+
+
+
+
+        with tab3:
+            if "promedio_500unds_en_horas" in filtered_data.columns:
+                # Ajustar los datos al valor dinámico ingresado
+                filtered_data["promedio_por_unds_en_horas"] = filtered_data["promedio_500unds_en_horas"] * (
+                        cantidad_unidades / 500)
+
+                # Sumar tiempos ajustados por subparte
+                suma_por_subparte = filtered_data.groupby("subparte")["promedio_por_unds_en_horas"].sum()
+
+                # Mostrar la suma ajustada por subparte
+                st.write(f"Suma de tiempos ajustados por subparte para {cantidad_unidades} unidades:")
+                st.bar_chart(suma_por_subparte)
+
+            # Gráfico de torta para tiempos ajustados por subparte
+            st.write(
+                f"Distribución porcentual de tiempos ajustados por subparte para {cantidad_unidades} unidades:")
             fig_subparte, ax_subparte = plt.subplots()
             ax_subparte.pie(
                 suma_por_subparte,
@@ -560,23 +613,55 @@ else:
             ax_subparte.axis('equal')  # Asegura que el gráfico sea un círculo perfecto
             st.pyplot(fig_subparte)
 
-            # Gráfico de barras: Suma de tiempos por máquina
-            suma_por_maquina = filtered_data.groupby("maquina")["promedio_500unds_en_horas"].sum()
-            st.write("Suma de tiempos por máquina:")
-            st.bar_chart(suma_por_maquina)
+        with tab4:
+    #if "promedio_500unds_en_horas" in filtered_data.columns:
 
-            # Gráfico de torta para tiempos por máquina
-            st.write("Distribución porcentual de tiempos por máquina:")
-            fig_maquina, ax_maquina = plt.subplots()
-            ax_maquina.pie(
-                suma_por_maquina,
-                labels=suma_por_maquina.index,
-                autopct='%1.1f%%',
-                startangle=90,
-                colors=plt.cm.tab20.colors
-            )
-            ax_maquina.axis('equal')  # Asegura que el gráfico sea un círculo perfecto
-            st.pyplot(fig_maquina)
+
+                # Gráfico de barras: Suma de tiempos por máquina
+
+
+                # Gráfico de torta para tiempos por máquina
+
+
+
+            if "promedio_500unds_en_horas" in filtered_data.columns:
+                # Ajustar los datos al valor dinámico ingresado
+                filtered_data["promedio_por_unds_en_horas"] = filtered_data["promedio_500unds_en_horas"] * (
+                        cantidad_unidades / 500)
+
+                # Sumar tiempos ajustados por máquina
+                suma_por_maquina = filtered_data.groupby("maquina")["promedio_por_unds_en_horas"].sum()
+
+                # Mostrar la suma ajustada por máquina
+                st.write(f"Suma de tiempos ajustados por máquina para {cantidad_unidades} unidades:")
+                st.bar_chart(suma_por_maquina)
+
+
+
+
+
+            if "promedio_500unds_en_horas" in filtered_data.columns:
+                # Ajustar los datos al valor dinámico ingresado
+                filtered_data["promedio_por_unds_en_horas"] = filtered_data["promedio_500unds_en_horas"] * (
+                            cantidad_unidades / 500)
+
+                # Sumar tiempos ajustados por máquina
+                suma_por_maquina = filtered_data.groupby("maquina")["promedio_por_unds_en_horas"].sum()
+
+                # Gráfico de torta: Distribución porcentual de tiempos por máquina
+                st.write(f"Distribución porcentual de tiempos ajustados por máquina para {cantidad_unidades} unidades:")
+                fig_maquina, ax_maquina = plt.subplots()
+                ax_maquina.pie(
+                    suma_por_maquina,
+                    labels=suma_por_maquina.index,
+                    autopct='%1.1f%%',
+                    startangle=90,
+                    colors=plt.cm.tab20.colors
+                )
+                ax_maquina.axis('equal')  # Asegura que el gráfico sea un círculo perfecto
+                st.pyplot(fig_maquina)
+
+        with tab5:
 
             # Crear un diccionario para almacenar las cantidades personalizadas
             cantidades = {}
@@ -708,8 +793,7 @@ else:
 
 
 
-        else:
-            st.warning("No se encontró la columna 'promedio_500unds_en_horas' en los datos filtrados.")
+
 
     else:
         st.warning("No hay datos para los filtros seleccionados.")
