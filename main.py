@@ -71,12 +71,25 @@ else:
         options=filtered_df["subparte"].unique(),
         default=[]
     )
+
+    filtered_df = filtered_df[filtered_df["subparte"].isin(subparte_filter)] if subparte_filter else filtered_df
+    maquina_options = filtered_df["maquina"].unique() if not filtered_df.empty else []
+    # Filtro por máquina en la barra lateral
+    # Filtro por Máquina
+    maquina_filter = st.sidebar.multiselect(
+        "Filtrar por Máquina",
+        options=maquina_options,
+        default=[]  # No seleccionar ninguna máquina por defecto
+    )
+
     operaciones_filter = st.sidebar.multiselect(
         "Filtrar por Operaciones",
         options=df[
             (df["producto"].isin(producto_filter) if producto_filter else True) &
-            (df["subparte"].isin(subparte_filter) if subparte_filter else True)
-        ]["operaciones"].unique()
+            (df["subparte"].isin(subparte_filter) if subparte_filter else True)&
+            (df["maquina"].isin(maquina_filter) if maquina_filter else True)
+
+            ]["operaciones"].unique()
     )
 
     st.sidebar.write("**Nota:**")
@@ -86,12 +99,14 @@ else:
     filtered_data = df[
         (df["producto"].isin(producto_filter) if producto_filter else True) &
         (df["subparte"].isin(subparte_filter) if subparte_filter else True) &
+        (df["maquina"].isin(maquina_filter) if maquina_filter else True) &
         (df["operaciones"].isin(operaciones_filter) if operaciones_filter else True)
     ]
 
     filtered_df_totales = df_totales[
         (df_totales["producto"].isin(producto_filter) if producto_filter else True) &
         (df_totales["subparte"].isin(subparte_filter) if subparte_filter else True) &
+        (df_totales["maquina"].isin(maquina_filter) if maquina_filter else True) &
         (df_totales["operaciones"].isin(operaciones_filter) if operaciones_filter else True)
         ]
 
@@ -545,7 +560,23 @@ else:
             ax_subparte.axis('equal')  # Asegura que el gráfico sea un círculo perfecto
             st.pyplot(fig_subparte)
 
+            # Gráfico de barras: Suma de tiempos por máquina
+            suma_por_maquina = filtered_data.groupby("maquina")["promedio_500unds_en_horas"].sum()
+            st.write("Suma de tiempos por máquina:")
+            st.bar_chart(suma_por_maquina)
 
+            # Gráfico de torta para tiempos por máquina
+            st.write("Distribución porcentual de tiempos por máquina:")
+            fig_maquina, ax_maquina = plt.subplots()
+            ax_maquina.pie(
+                suma_por_maquina,
+                labels=suma_por_maquina.index,
+                autopct='%1.1f%%',
+                startangle=90,
+                colors=plt.cm.tab20.colors
+            )
+            ax_maquina.axis('equal')  # Asegura que el gráfico sea un círculo perfecto
+            st.pyplot(fig_maquina)
 
             # Crear un diccionario para almacenar las cantidades personalizadas
             cantidades = {}
