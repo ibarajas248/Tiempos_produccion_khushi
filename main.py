@@ -56,7 +56,7 @@ if df.empty:
 else:
     # Creación de filtros
     st.sidebar.header("Filtros")
-
+#s
     producto_filter = st.sidebar.multiselect(
         "Filtrar por Producto",
         options=df["producto"].unique(),
