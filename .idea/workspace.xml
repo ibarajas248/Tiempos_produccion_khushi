@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="206c8bb4-df47-4062-b3b3-1825956f445e" name="Changes" comment="actualizacion 14/12/2024_2">
+    <list default="true" id="206c8bb4-df47-4062-b3b3-1825956f445e" name="Changes" comment="actualizacion 16/12/2024_2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -112,13 +112,22 @@
       <option name="project" value="LOCAL" />
       <updated>1734219575631</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="actualizacion 16/12/2024_2">
+      <option name="closed" value="true" />
+      <created>1734347454213</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1734347454213</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="inicial" />
     <MESSAGE value="actualizacion 14/12/2024" />
     <MESSAGE value="actualizacion 14/12/2024_2" />
-    <option name="LAST_COMMIT_MESSAGE" value="actualizacion 14/12/2024_2" />
+    <MESSAGE value="actualizacion 16/12/2024_2" />
+    <option name="LAST_COMMIT_MESSAGE" value="actualizacion 16/12/2024_2" />
   </component>
 </project>
