@@ -47,7 +47,7 @@ df = load_data()
 df_totales =pd.read_excel("datos_empleados_todas.xlsx")
 
 
-st.write("Ultima actualización: 14/12/2024")
+st.write("Ultima actualización: 28/12/2024")
 # Título de la aplicación
 st.title("Visualización de Tiempo Promedio y Desviación")
 
