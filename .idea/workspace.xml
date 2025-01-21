@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="206c8bb4-df47-4062-b3b3-1825956f445e" name="Changes" comment="actualizacion 16/12/2024_2">
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="206c8bb4-df47-4062-b3b3-1825956f445e" name="Changes" comment="aa">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datos_empleados.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/datos_empleados.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datos_empleados_todas.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/datos_empleados_todas.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datos_generales.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/datos_generales.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +17,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -36,14 +40,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/David/PycharmProjects/Estudio_de_tiempos_Khushi"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/David/PycharmProjects/Estudio_de_tiempos_Khushi&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\David\PycharmProjects\Estudio_de_tiempos_Khushi" />
@@ -129,7 +133,39 @@
       <option name="project" value="LOCAL" />
       <updated>1735417331468</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="actualizacion 16/12/2024_2">
+      <option name="closed" value="true" />
+      <created>1735417608372</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1735417608372</updated>
+    </task>
+    <task id="LOCAL-00007" summary="actualizacion 16/12/2024_2">
+      <option name="closed" value="true" />
+      <created>1735417636562</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1735417636562</updated>
+    </task>
+    <task id="LOCAL-00008" summary="sss">
+      <option name="closed" value="true" />
+      <created>1735417656432</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1735417656432</updated>
+    </task>
+    <task id="LOCAL-00009" summary="aa">
+      <option name="closed" value="true" />
+      <created>1735417715107</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1735417715107</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -137,6 +173,8 @@
     <MESSAGE value="actualizacion 14/12/2024" />
     <MESSAGE value="actualizacion 14/12/2024_2" />
     <MESSAGE value="actualizacion 16/12/2024_2" />
-    <option name="LAST_COMMIT_MESSAGE" value="actualizacion 16/12/2024_2" />
+    <MESSAGE value="sss" />
+    <MESSAGE value="aa" />
+    <option name="LAST_COMMIT_MESSAGE" value="aa" />
   </component>
 </project>
